@@ -1,13 +1,14 @@
-import type React from "react"
+import React from "react"
 import { useState } from "react"
 import { Check } from "lucide-react"
-import AuthLayout from "./AuthLayout"
+import AuthLayout from "./AuthLayout.tsx"
 
 interface EmailVerificationScreenProps {
   email: string
+  onBackToLoginClick: () => void
 }
 
-const EmailVerificationScreen: React.FC<EmailVerificationScreenProps> = ({ email }) => {
+const EmailVerificationScreen: React.FC<EmailVerificationScreenProps> = ({ email, onBackToLoginClick }) => {
   const [isVerified, setIsVerified] = useState(false)
   const [isResending, setIsResending] = useState(false)
 
@@ -16,12 +17,6 @@ const EmailVerificationScreen: React.FC<EmailVerificationScreenProps> = ({ email
     // Simulate API call
     await new Promise((resolve) => setTimeout(resolve, 2000))
     setIsResending(false)
-  }
-
-  const handleVerifyEmail = async () => {
-    // Simulate API call
-    await new Promise((resolve) => setTimeout(resolve, 2000))
-    setIsVerified(true)
   }
 
   return (
@@ -55,14 +50,14 @@ const EmailVerificationScreen: React.FC<EmailVerificationScreenProps> = ({ email
               {isResending ? "Resending..." : "Resend verification email"}
             </button>
             <div className="text-sm">
-              <a href="#" className="font-medium text-blue-500 hover:text-blue-400">
+              <button type="button" className="font-medium text-blue-500 hover:text-blue-400">
                 Edit email address
-              </a>
+              </button>
             </div>
             <div className="mt-4 text-sm">
-              <a href="#" className="font-medium text-blue-500 hover:text-blue-400">
+              <button type="button" onClick={onBackToLoginClick} className="font-medium text-blue-500 hover:text-blue-400">
                 Back to login
-              </a>
+              </button>
             </div>
           </>
         )}

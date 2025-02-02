@@ -1,8 +1,8 @@
-import type React from "react"
+import React from "react"
 import { useState } from "react"
 import { useForm } from "react-hook-form"
 import { Eye, EyeOff } from "lucide-react"
-import AuthLayout from "./AuthLayout"
+import AuthLayout from "./AuthLayout.tsx"
 
 interface ResetRequestFormData {
   email: string
@@ -13,11 +13,22 @@ interface NewPasswordFormData {
   confirmPassword: string
 }
 
-const PasswordResetFlow: React.FC = () => {
-  const [step, setStep] = useState<"request" | "newPassword">("request")
+interface PasswordResetFlowProps {
+  onBackToLoginClick: () => void;
+}
+
+const PasswordResetFlow: React.FC<PasswordResetFlowProps> = ({ onBackToLoginClick }) => {
+  const [step, setStep] = React.useState<"request" | "newPassword">("request")
 
   return (
-    <>{step === "request" ? <ResetRequestScreen onSuccess={() => setStep("newPassword")} /> : <NewPasswordScreen />}</>
+    <>
+      {step === "request" ? <ResetRequestScreen onSuccess={() => setStep("newPassword")} /> : <NewPasswordScreen />}
+      <div className="mt-4 text-center">
+        <a href="#" onClick={(e) => { e.preventDefault(); onBackToLoginClick(); }} className="text-sm font-medium text-blue-500 hover:text-blue-400">
+          Back to Login
+        </a>
+      </div>
+    </>
   )
 }
 
@@ -71,12 +82,6 @@ const ResetRequestScreen: React.FC<{ onSuccess: () => void }> = ({ onSuccess }) 
           </button>
         </div>
       </form>
-
-      <div className="mt-6 text-center">
-        <a href="#" className="text-sm font-medium text-blue-500 hover:text-blue-400">
-          Back to Login
-        </a>
-      </div>
     </AuthLayout>
   )
 }

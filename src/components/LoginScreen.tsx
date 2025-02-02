@@ -1,8 +1,8 @@
-import type React from "react"
+import React from "react"
 import { useState } from "react"
 import { useForm } from "react-hook-form"
 import { Eye, EyeOff, GitlabIcon as GitHub } from "lucide-react"
-import AuthLayout from "./AuthLayout"
+import AuthLayout from "./AuthLayout.tsx"
 
 interface LoginFormData {
   email: string
@@ -10,7 +10,12 @@ interface LoginFormData {
   rememberMe: boolean
 }
 
-const LoginScreen: React.FC = () => {
+interface LoginScreenProps {
+  onSignUpClick: () => void;
+  onForgotPasswordClick: () => void;
+}
+
+const LoginScreen: React.FC<LoginScreenProps> = ({ onSignUpClick, onForgotPasswordClick }) => {
   const [isLoading, setIsLoading] = useState(false)
   const [showPassword, setShowPassword] = useState(false)
   const {
@@ -91,9 +96,9 @@ const LoginScreen: React.FC = () => {
           </div>
 
           <div className="text-sm">
-            <a href="#" className="font-medium text-blue-500 hover:text-blue-400">
+            <button type="button" onClick={onForgotPasswordClick} className="font-medium text-blue-500 hover:text-blue-400">
               Forgot your password?
-            </a>
+            </button>
           </div>
         </div>
 
@@ -144,12 +149,10 @@ const LoginScreen: React.FC = () => {
       </div>
 
       <div className="mt-6 text-center">
-        <p className="text-sm text-gray-400">
-          Don't have an account?{" "}
-          <a href="#" className="font-medium text-blue-500 hover:text-blue-400">
-            Sign up
-          </a>
-        </p>
+        <span className="text-sm text-gray-300">Don't have an account? </span>
+        <button type="button" onClick={onSignUpClick} className="text-sm font-medium text-blue-500 hover:text-blue-400">
+          Sign up
+        </button>
       </div>
     </AuthLayout>
   )

@@ -1,8 +1,8 @@
-import type React from "react"
+import React from "react"
 import { useState } from "react"
 import { useForm } from "react-hook-form"
 import { Eye, EyeOff } from "lucide-react"
-import AuthLayout from "./AuthLayout"
+import AuthLayout from "./AuthLayout.tsx"
 
 interface SignUpFormData {
   fullName: string
@@ -12,7 +12,12 @@ interface SignUpFormData {
   terms: boolean
 }
 
-const SignUpScreen: React.FC = () => {
+interface SignUpScreenProps {
+  onLoginClick: () => void;
+  onSignUpSuccess: (email: string) => void;
+}
+
+const SignUpScreen: React.FC<SignUpScreenProps> = ({ onLoginClick, onSignUpSuccess }) => {
   const [isLoading, setIsLoading] = useState(false)
   const [showPassword, setShowPassword] = useState(false)
   const {
@@ -28,6 +33,7 @@ const SignUpScreen: React.FC = () => {
     await new Promise((resolve) => setTimeout(resolve, 2000))
     console.log(data)
     setIsLoading(false)
+    onSignUpSuccess(data.email)
   }
 
   const password = watch("password", "")
@@ -117,7 +123,7 @@ const SignUpScreen: React.FC = () => {
               {...register("confirmPassword", {
                 required: "Please confirm your password",
                 validate: (val: string) => {
-                  if (watch("password") != val) {
+                  if (watch("password") !== val) {
                     return "Your passwords do not match"
                   }
                 },
@@ -136,9 +142,9 @@ const SignUpScreen: React.FC = () => {
           />
           <label htmlFor="terms" className="ml-2 block text-sm text-gray-300">
             I agree to the{" "}
-            <a href="#" className="font-medium text-blue-500 hover:text-blue-400">
+            <button type="button" className="font-medium text-blue-500 hover:text-blue-400">
               Terms and Conditions
-            </a>
+            </button>
           </label>
         </div>
         {errors.terms && <p className="mt-2 text-sm text-red-500">{errors.terms.message}</p>}
@@ -198,9 +204,9 @@ const SignUpScreen: React.FC = () => {
       <div className="mt-6 text-center">
         <p className="text-sm text-gray-400">
           Already have an account?{" "}
-          <a href="#" className="font-medium text-blue-500 hover:text-blue-400">
+          <button type="button" onClick={onLoginClick} className="font-medium text-blue-500 hover:text-blue-400">
             Sign in
-          </a>
+          </button>
         </p>
       </div>
     </AuthLayout>
